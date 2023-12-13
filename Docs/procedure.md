@@ -109,3 +109,45 @@
    Prefabが作れたら、画面上に配置した弾は不要です（設計図があればいつでも作れるため）ヒエラルキービューから「bulletPrefab」を選択し、右クリック→「Delete」を選択します。
 
    ![Alt text](image-9.png)
+
+1. Prefabからインスタンスを作ろう
+
+   次はスペースキーが押されるたび、弾のPrefabをから弾のインスタンス（複製）を作るスクリプトを作成しましょう。
+
+   前回作成した「RocketController.cs」を開いて次のようにスクリプトを修正します。
+
+   ```cs
+   using UnityEngine;
+   using System.Collections;
+
+   public class RocketController : MonoBehaviour {
+
+      public GameObject bulletPrefab;
+
+      void Update () {
+         if (Input.GetKey (KeyCode.LeftArrow)) {
+            transform.Translate (-0.1f, 0, 0);
+         }
+         if (Input.GetKey (KeyCode.RightArrow)) {
+            transform.Translate ( 0.1f, 0, 0);
+         }
+         if (Input.GetKeyDown (KeyCode.Space)) {
+            Instantiate (bulletPrefab, transform.position, Quaternion.identity);
+         }
+      }
+   }
+   ```
+
+   このスクリプトではGetKeyDown関数を使ってスペースキーが押されたことを検知し、弾のPrefabから弾のインスタンスを作っています。
+   GetKeyDown関数はGetKey関数と違って、キーが押下された時に一度だけtrueになる関数です。
+   　
+   弾のPrefabからインスタンスを作るために、Instantiate関数を使っています。
+   Instantiate関数は、第一引数にPrefab、第二引数にインスタンスを生成する位置、第三引数にはインスタンスの回転角を指定します。
+   ここではRocketControllerの中でtransform.positionと書いているので、ロケットの位置に弾を生成しています。
+
+   最後に、作成したbulletPrefabとスクリプト内で宣言した変数とを関連付けます。
+   ヒエラルキービューからrocketを選択し、インスペクタから「RocketControllerスクリプト」の項目を探し、「bullet Prefab」の欄に、プロジェクトビューから「bulletPrefab」をドラッグ＆ドロップして下さい。
+
+   ![Alt text](image-10.png)
+
+   ここまで出来たら、実行してみましょう。スペースキーを押すたびに弾が発射されるようになりました。

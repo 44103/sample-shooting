@@ -220,3 +220,64 @@
    ![Alt text](image-15.png)
 
    実行してみて、隕石が回転しながら落下してくるのを確認しましょう。
+
+1. 隕石を時間とともに生成する
+
+   ゲーム中で生成されるオブジェクトは、Prefab化してスクリプトで生成するのが定石です。
+   流れとしては弾を作ったときと同様、次のようなステップです。
+
+   1. 生成したいオブジェクトをPrefab化する
+   1. スクリプトでPrefabからインスタンスを作る
+   1. Prefabの実体とスクリプト内の変数を関連付ける
+
+   まずは隕石のPrefabを作成しましょう。ヒエラルキービューから「rock_0」を選択し、プロジェクトビューにドラッグ＆ドロップします。
+   作成したPrefabの名前を「RockPrefab」に変更します。
+
+   ![Alt text](image-16.png)
+
+   Prefabができたら画面上の隕石は不要なので消しておきます。
+   ヒエラルキービューの「RockPrefab」を右クリックし「Delete」を選択して下さい。
+
+   ![Alt text](image-17.png)
+
+   弾はスペースキーが押されたタイミングでインスタンスを生成していました。
+   今回は、一定時間たつと自動的に隕石のインスタンスを生成するようにしましょう。
+
+   プロジェクトビューで右クリックして「Create」→「C# Script」を選択し、出来たファイルの名前を「RockGenerator」に変更します。
+   ファイルを開いて次のスクリプトを入力して下さい。
+
+   ```cs
+   using UnityEngine;
+   using System.Collections;
+
+   public class RockGenerator : MonoBehaviour {
+
+      public GameObject rockPrefab;
+
+      void Start () {
+         InvokeRepeating ("GenRock", 1, 1);
+      }
+
+      void GenRock () {
+         Instantiate (rockPrefab, new Vector3 (-2.5f + 5 * Random.value, 6, 0), Quaternion.identity);
+      }
+   }
+   ```
+
+   隕石を１秒に１回生成するために、InvokeRepeating関数を使っています。InvokeRepeating関数は第一引数の関数を第二引数の秒数ごとに実行してくれる結構便利な関数です。
+   ここではGenRock関数を呼び出し、その中でランダムな位置に隕石を生成しています。
+
+   ファイルが生成できたところでゲームオブジェクトにRockGeneratorスクリプトをアタッチします。
+   アタッチする適切なオブジェクトが無いので、ヒエラルキービューの「Create」→「Create Empty」で空のオブジェクトを生成します。
+
+   ![Alt text](image-18.png)
+
+   作成したオブジェクトにスクリプトをアタッチします。ヒエラルキービューの「GameObject」にプロジェクトビューの「RockGenerator」をドラッグ＆ドロップして下さい。
+
+   ![Alt text](image-19.png)
+
+   最後にスクリプト内で宣言したRockPrefab変数に、Prefabの実体を代入します。ヒエラルキービューで「GameObject」を選択して、インスペクタに表示される「Rock Prefab」の欄にプロジェクトビューの「RockPrefab」をドラッグ＆ドロップします。
+
+   ![Alt text](image-20.png)
+
+   ゲームを実行してみて隕石が次々と落ちてくることを確認しましょう。

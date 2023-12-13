@@ -171,3 +171,52 @@
    スライスの範囲を修正したい場合には、修正したいスプライトを選択し、スライス領域を指定します。
 
    ![Alt text](image-13.png)
+
+1. 隕石を表示しよう
+   スプライトを個別に切り出すことが出来たので、正しくスライス出来たか確認しましょう。
+   プロジェクトビューで「Rock」の「▶」ボタンをクリックすると、スライスされたスプライトが表示されます。
+   　
+   スライスされた隕石から１つを選択してシーンビューに配置します。
+   配置する座標はのちほどスクリプトから決めるのでここでは適当で大丈夫です。
+
+   ![Alt text](image-14.png)
+
+1. 隕石を落下させよう
+   隕石が落下してくるようにスクリプトを作成しましょう。
+   プロジェクトビューで右クリックから「Create」→「C# Script」を選択し、出来たファイルの名前を「RockController」に変更します。ファイルを開いて次のスクリプトを入力して下さい。
+
+   ```cs
+   using UnityEngine;
+   using System.Collections;
+
+   public class RockController : MonoBehaviour {
+
+      float fallSpeed;
+      float rotSpeed;
+
+      void Start () {
+         this.fallSpeed = 0.01f + 0.1f * Random.value;
+         this.rotSpeed = 5f + 3f * Random.value;
+      }
+
+      void Update () {
+         transform.Translate( 0, -fallSpeed, 0, Space.World);
+         transform.Rotate(0, 0, rotSpeed );
+
+         if (transform.position.y < -5.5f) {
+            Destroy (gameObject);
+         }
+      }
+   }
+   ```
+
+   隕石が回転しながら落下するようにTranslate関数とRotate関数を使っています。
+   また、Randomメソッドを使って落下速度が隕石ごとに変わるようにしています。
+   隕石が画面下端を超えた場合は、Destroyメソッドで自分自身のオブジェクトを破棄しています。
+
+   スクリプトが作成できたら、隕石オブジェクトにアタッチしましょう。
+   プロジェクトビューから「RockController.cs」を選択し、ヒエラルキービューの「rock_0」にドラッグ＆ドロップして下さい。
+
+   ![Alt text](image-15.png)
+
+   実行してみて、隕石が回転しながら落下してくるのを確認しましょう。

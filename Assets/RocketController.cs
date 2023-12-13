@@ -1,19 +1,25 @@
 using UnityEngine;
 using System.Collections;
 
-public class RocketController : MonoBehaviour {
+public class RocketController : MonoBehaviour
+{
+  public GameObject bulletPrefab;
 
-	public GameObject bulletPrefab;
+  void Update()
+  {
+    float x = Input.GetAxisRaw("Horizontal");
+    x = x * 0.1f;
+    transform.Translate(x, 0, 0);
 
-	void Update () {
-		if (Input.GetKey (KeyCode.LeftArrow)) {
-			transform.Translate (-0.1f, 0, 0);
-		}
-		if (Input.GetKey (KeyCode.RightArrow)) {
-			transform.Translate ( 0.1f, 0, 0);
-		}
-		if (Input.GetKeyDown (KeyCode.Space)) {
-			Instantiate (bulletPrefab, transform.position, Quaternion.identity);
-		}
-	}
+    Vector3 currentPos = transform.position;
+    currentPos.x = Mathf.Clamp(currentPos.x, -2.2f, 2.2f);
+
+    //追加　positionをcurrentPosにする
+    transform.position = currentPos;
+
+    if (Input.GetKeyDown(KeyCode.Space))
+    {
+      Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+    }
+  }
 }

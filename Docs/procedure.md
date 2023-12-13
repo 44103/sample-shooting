@@ -364,3 +364,56 @@
 
    OnTriggerEnter2D関数の中でDestroy関数を使って隕石と弾のオブジェクトを破棄しています。
    ゲームを実行して、当たり判定ができているかを確かめてみましょう。
+
+1. 爆発のエフェクトを追加しよう
+
+   隕石を破壊した時に、ただ消えるだけでは寂しいので、爆発のエフェクトを追加します。
+   Asset Storeに「Toon Explosion VFX Texture Free」という素材があるので、今回はそれを利用します。
+
+   ![Alt text](image-25.png)
+   ![Alt text](image-26.png)
+   ![Alt text](image-27.png)
+
+   このアセットは爆発エフェクトが繰り返し表示される設定になっています。
+   今回は隕石と弾が衝突した時に一度だけ爆発エフェクトを表示したいので設定を変更します。
+
+   プロジェクトビューから「Assets→Textures→Sprites→toonExplotionFree→Example」の中にある「exampleExplosionEffect」を選択し、インスペクタの「Particle System」→「Looping」のチェックを外します。
+
+   ![Alt text](image-28.png)
+
+   隕石と弾が衝突した時にエフェクトを表示したいので、先ほどのOnTriggerEnter2D関数の中に、爆発エフェクトを生成する処理を追加します。
+
+   ```cs
+   using UnityEngine;
+   using System.Collections;
+
+   public class BulletController : MonoBehaviour {
+
+   //爆発エフェクトのPrefab
+      public GameObject explosionPrefab;
+
+      void Update () {
+         transform.Translate (0, 0.2f, 0);
+
+         if (transform.position.y > 5) {
+            Destroy (gameObject);
+         }
+      }
+
+      void OnTriggerEnter2D(Collider2D coll) {
+         // 爆発エフェクトを生成する
+         GameObject explosion = Instantiate (explosionPrefab, transform.position, Quaternion.identity);
+         Destroy (coll.gameObject);
+         Destroy (gameObject);
+         Destroy (explosion, 2.0f);
+      }
+   }
+   ```
+
+   スクリプト中で宣言したexplosionPrefab変数にPrefabの実体を代入します。
+   プロジェクトビューから「bulletPrefab」を選択し、インスペクタから「Bullet Controller (Script)」の中にある「Explosion Prefab」の欄を探して下さい。
+   そこにインポートした爆発エフェクトのPrefabをドラッグ＆ドロップします。
+
+   ![Alt text](image-29.png)
+
+   実行して正しく爆発エフェクトをが表示されるかみてみましょう。

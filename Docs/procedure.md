@@ -333,3 +333,34 @@
    「Kinematic」にすることで、弾は重力などの物理的な力を受けなくなります（この設定を入れないと、重力で弾は下に落ちていこうとします）
 
    ![Alt text](image-24.png)
+
+1. スクリプトから衝突を検知しよう
+
+   スクリプトから、弾と隕石が衝突したことを検知します。
+   衝突時にはRockControllerかBulletControllerに「OnCollisionEnter2D関数」が実装されていれば、その関数が呼び出されます。
+
+   ここではBulletControllerにOnCollisionEnter2Dを付け加えてましょう。
+   プロジェクトビューからBulletControllerを開いて、次のスクリプトを入力して下さい。
+
+   ```cs
+   using UnityEngine;
+   using System.Collections;
+
+   public class BulletController : MonoBehaviour {
+      void Update () {
+         transform.Translate (0, 0.2f, 0);
+
+         if (transform.position.y > 5) {
+            Destroy (gameObject);
+         }
+      }
+
+      void OnTriggerEnter2D(Collider2D coll) {
+         Destroy (coll.gameObject);
+         Destroy (gameObject);
+      }
+   }
+   ```
+
+   OnTriggerEnter2D関数の中でDestroy関数を使って隕石と弾のオブジェクトを破棄しています。
+   ゲームを実行して、当たり判定ができているかを確かめてみましょう。

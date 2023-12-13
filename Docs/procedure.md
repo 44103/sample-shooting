@@ -628,3 +628,25 @@
    ![Alt text](image-35.png)
 
    実行して背景がスクロールすることを確かめておきましょう。
+
+1. UIの設定を見直そう
+
+   ゲームを実行した状態でUnityエディタを拡大縮小してみてください。
+   右上に表示しているスコアの文字サイズは変化していません。
+
+   このように、UIに関しては画面サイズによらずに決まったピクセル数で描画されてしまいます。
+   様々な解像度のデバイスで同じような見た目にするためには、CanvasにアタッチされているCanvas Scalerコンポーネントを修正します。
+
+   ヒエラルキービューから「Canvas」を選択した状態で、インスペクタの「Canvas Scalerコンポーネント→UI Scale Mode」を「Scale With Screen Size」に設定し、「Screen Match Mode」を「Expand」に設定します。
+
+   ![Alt text](image-36.png)
+
+   上記の設定をしたことで、フォントがものすごく小さく表示されていると思います。
+   ヒエラルキービューから「Canvas/Score」を選択し、Rect TransformのPositionを（-200, -60, 0） に、WidthとHeightを(400, 120) に修正し、フォントサイズを「60」に設定します。
+
+   ![Alt text](image-37.png)
+
+   同様にGameOverのラベルもサイズを再調整しておきましょう。
+   ヒエラルキービューから「Canvas/GameOver」を選択し、Rect TransformのWidthとHeightを(450, 120) に、フォントサイズを「80」に設定します。
+
+   ![Alt text](image-38.png)

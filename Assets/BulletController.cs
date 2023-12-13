@@ -3,7 +3,6 @@ using System.Collections;
 
 public class BulletController : MonoBehaviour {
 
-  //爆発エフェクトのPrefab
 	public GameObject explosionPrefab;
 
 	void Update () {
@@ -15,10 +14,14 @@ public class BulletController : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D(Collider2D coll) {
-		// 爆発エフェクトを生成する
-		GameObject explosion = Instantiate (explosionPrefab, transform.position, Quaternion.identity);
+		// 衝突したときにスコアを更新する
+		GameObject.Find ("Canvas").GetComponent<UIController> ().AddScore ();
+
+    // 爆発エフェクトを生成する
+		GameObject effect = Instantiate (explosionPrefab, transform.position, Quaternion.identity) as GameObject;
+		Destroy (effect, 1.0f);
+
 		Destroy (coll.gameObject);
 		Destroy (gameObject);
-		Destroy (explosion, 2.0f);
 	}
 }

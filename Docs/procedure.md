@@ -435,3 +435,84 @@
    ゲームオーバのテキストも、同様の手順で配置しましょう。ヒエラルキービューから「Create」→「UI」→「Text」を選択して、作成したTextの名前を「GameOver」に変更し、インスペクタの設定を下記のように行います。
 
    ![Alt text](image-32.png)
+
+1. スクリプトからスコアを更新しよう
+
+   次に、スコアを更新するためのスクリプトを作成します。
+   プロジェクトビューで「右クリック」→「Create」→「C# Script」を選択し、ファイル名を「UIController」に変更して下さい。
+
+   UIControllerに次のスクリプトを入力します。
+
+   ```cs
+   using UnityEngine;
+   using UnityEngine.UI;
+   using System.Collections;
+   using TMPro;
+
+   public class UIController : MonoBehaviour {
+
+      int score = 0;
+      GameObject scoreText;
+
+      public void AddScore(){
+         this.score += 10;
+      }
+
+      void Start () {
+         this.scoreText = GameObject.Find ("Score");
+      }
+
+      void Update () {
+         scoreText.GetComponent<TMP_Text> ().text = "Score:" + score.ToString("D4");
+      }
+   }
+   ```
+
+   このスクリプトでは、Start関数の中でシーンビューに配置したUIのText（Scoreテキスト）を検索し、メンバ変数に保存しています。
+   Update関数内でTextにスコアを代入しています。
+   Add関数は弾と隕石が衝突したときに呼び出される関数で、この中でスコアの更新を行っています。
+
+   ここで一度、動作を確認してみましょう。
+   プロジェクトビューの「UIController」をヒエラルキービューの「Canvas」にドラッグ＆ドロップして下さい。
+
+   ![Alt text](image-33.png)
+
+   実行すると、右上にスコアが表示されます。
+   でも、隕石を破壊してもスコアが増えずに「0000」のままですね...
+   これはUIControllerに実装したAddScore関数を呼び出していないのが原因です。
+
+   スコアが更新されるようにAddScore関数を呼び出す部分を作成します。
+   弾と隕石が衝突したときにスコアを増やしたいので、BulletControllerのOnTriggerEnter2Dの中でAddScore関数を呼び出します。
+   BulletControllerを開いて次のスクリプトを追記して下さい。
+
+   ```cs
+   using UnityEngine;
+   using System.Collections;
+
+   public class BulletController : MonoBehaviour {
+
+      public GameObject explosionPrefab;
+
+      void Update () {
+         transform.Translate (0, 0.2f, 0);
+
+         if (transform.position.y > 5) {
+            Destroy (gameObject);
+         }
+      }
+
+      void OnTriggerEnter2D(Collider2D coll) {
+         // 衝突したときにスコアを更新する
+         GameObject.Find ("Canvas").GetComponent<UIController> ().AddScore ();
+
+                  // 爆発エフェクトを生成する
+         GameObject effect = Instantiate (explosionPrefab, transform.position, Quaternion.identity) as GameObject;
+         Destroy (effect, 1.0f);
+
+         Destroy (coll.gameObject);
+         Destroy (gameObject);
+      }
+   }
+   ```
+
+   もう一度実行して、スコアが増えることを確認しましょう。

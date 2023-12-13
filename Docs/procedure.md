@@ -306,4 +306,30 @@
 
    今回は隕石と弾の当たり判定をしたいので、両方のオブジェクトにColliderコンポーネントをアタッチし、弾にはRigidbodyコンポーネントをアタッチしましょう。
 
-   Physicsを使った当たり判定についても「Unityの教科書」にイラスト付きで解説しています。是非参考にしてみて下さい。
+1. コンポーネントをアタッチしよう
+
+   まずは隕石にColliderコンポーネントをアタッチします。プロジェクトビューから「RockPrefab」を選択し、インスペクタのAddComponentをクリックします。
+   メニューから「Pysics2D」→「Circle Collider2D」を選択します。
+
+   ![Alt text](image-21.png)
+
+   シーンビューのRockPrefabを選択すると、隕石の周りに緑色の円が表示されています。
+   これが当たり判定のためのCircle Colliderになります。
+
+   弾にはColliderコンポーネントとRigidbodyコンポーネントをアタッチします。
+   プロジェクトビューから「BulletPrefab」を選択し、インスペクタのAddComponentをクリック、「Pysics2D」→「Circle Collider2D」を選択します。
+
+   ![Alt text](image-22.png)
+
+   続いてRigidbodyコンポーネントをアタッチしましょう。
+   先ほどと同じように、プロジェクトビューから「BulletPrefab」を選択したうえで、インスペクタのAddComponentから「Pysics2D」→「Rigidbody2D」を選択します。
+
+   いまアタッチしたCircle Collider 2Dコンポーネントの「Is Trigger」にチェックを入れます。
+   「Is Trigger」をチェックすると、オブジェクト衝突時に、衝突検知だけをして、衝突オブジェクトはすり抜けるようになります（跳ね返らなくなります）
+
+   ![Alt text](image-23.png)
+
+   また、Rigidbodyコンポーネントの「Body Type」を「Kinematic」にします。
+   「Kinematic」にすることで、弾は重力などの物理的な力を受けなくなります（この設定を入れないと、重力で弾は下に落ちていこうとします）
+
+   ![Alt text](image-24.png)

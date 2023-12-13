@@ -7,6 +7,11 @@ public class UIController : MonoBehaviour {
 
 	int score = 0;
 	GameObject scoreText;
+  GameObject gameOverText;
+
+  public void GameOver() {
+    this.gameOverText.GetComponent<TMP_Text>().text = "GameOver";
+  }
 
 	public void AddScore(){
 		this.score += 10;
@@ -14,6 +19,7 @@ public class UIController : MonoBehaviour {
 
 	void Start () {
 		this.scoreText = GameObject.Find ("Score");
+    this.gameOverText = GameObject.Find ("GameOver");
 	}
 
 	void Update () {

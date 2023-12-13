@@ -516,3 +516,70 @@
    ```
 
    もう一度実行して、スコアが増えることを確認しましょう。
+
+1. ゲームオーバを表示しよう
+
+   隕石が画面下のラインを超えたときに、画面上にGameOverを表示するため、UIControllerにGameOver関数を追加しましょう。
+   GameOver関数ではシーンビューのTextに"GameOver"の文字列を代入しています。
+
+   ```cs
+   using UnityEngine;
+   using UnityEngine.UI;
+   using System.Collections;
+   using TMPro;
+
+   public class UIController : MonoBehaviour {
+
+      int score = 0;
+      GameObject scoreText;
+      GameObject gameOverText;
+
+      public void GameOver() {
+         this.gameOverText.GetComponent<TMP_Text>().text = "GameOver";
+      }
+
+      public void AddScore(){
+         this.score += 10;
+      }
+
+      void Start () {
+         this.scoreText = GameObject.Find ("Score");
+      this.gameOverText = GameObject.Find ("GameOver");
+      }
+
+      void Update () {
+         scoreText.GetComponent<TMP_Text> ().text = "Score:" + score.ToString("D4");
+      }
+   }
+   ```
+
+   隕石が画面下のラインを超えたときにゲームオーバと判定します。
+   画面下端を超えたかどうかはRockControllerで判定していたので、そこでUIControllerのGameOver関数を呼び出します。
+
+   ```cs
+   using UnityEngine;
+   using System.Collections;
+
+   public class RockController : MonoBehaviour {
+
+      float fallSpeed;
+      float rotSpeed;
+
+      void Start () {
+         this.fallSpeed = 0.01f + 0.1f * Random.value;
+         this.rotSpeed = 5f + 3f * Random.value;
+      }
+
+      void Update () {
+         transform.Translate( 0, -fallSpeed, 0, Space.World);
+         transform.Rotate(0, 0, rotSpeed );
+
+         if (transform.position.y < -5.5f) {
+            GameObject.Find ("Canvas").GetComponent<UIController> ().GameOver ();
+            Destroy (gameObject);
+         }
+      }
+   }
+   ```
+
+   ゲームを実行すると次のようになります。かなりゲームっぽくなってきましたね！

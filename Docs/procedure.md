@@ -650,3 +650,24 @@
    ヒエラルキービューから「Canvas/GameOver」を選択し、Rect TransformのWidthとHeightを(450, 120) に、フォントサイズを「80」に設定します。
 
    ![Alt text](image-38.png)
+
+1. Trail Rendererを使って弾にエフェクトをつけよう
+
+   最後に、発射した弾が尾を引くようなエフェクトを付け加えましょう。
+   尾を引くようなエフェクトには「Trail Renderer」を使用します。
+
+   まずは、トレイルレンダラー用のマテリアルを作ります。
+   プロジェクトビューで右クリック→「Material」を選択し「trailMat」という名前で保存して下さい。
+
+   ![Alt text](image-39.png)
+
+   このtrail_matを選択した状態で、インスペクタからシェーダを「Particle/Additive(soft)」に変更し、Textureの欄にプロジェクトビューの「trail」をセットします。
+
+   ![Alt text](image-40.png)
+
+   続いて、弾に「Trail Rendererコンポーネント」をアタッチします。プロジェクトビューで「bulletPrefab」を選択した状態で、インスペクタから「Add Component」→「Effects」→「Trail Renderer」を選択してください。
+
+   「Trail Rendererコンポーネント」の「Materials/Element0」の欄に、いま作成した「trailMat」をドラッグ＆ドロップします。また、「Time」を「0.3」に、「Start Width」を「0.2」に、「End Width」を「0」に設定してください。
+
+   ![Alt text](image-41.png)
+
